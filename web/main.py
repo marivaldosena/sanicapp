@@ -1,14 +1,4 @@
-from sanic import Sanic
-from sanic.response import json
-
-
-app = Sanic(__name__)
-
-
-@app.route('/')
-async def main(request):
-    return json({'hello': 'world'})
-
+from app import app
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, workers=2)
+    app.run(host='0.0.0.0', workers=2, port=8000)
