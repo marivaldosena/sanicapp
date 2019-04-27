@@ -30,3 +30,8 @@ class Todo():
         todo = cls(result.get('title'), result.get('description'))
         todo.id = str(result.get('_id'))
         return todo
+
+    def delete(self):
+        if self.id:
+            db.todos.delete_one({'id': collection.ObjectId(self.id)})
+            return self
