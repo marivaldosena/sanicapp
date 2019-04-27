@@ -5,22 +5,28 @@ db = mongo.sanicapp
 
 
 class Todo():
-    def __init__(self, name, description):
-        self.name = name
+    def __init__(self, title, description):
+        self.title = title
         self.description = description
 
     def save(self):
         result = db.todos.insert_one({
-            'name': self.name,
+            'title': self.title,
             'description': self.description
         })
         self.id = result.inserted_id
 
-
     @classmethod
-    def find_one(cls, id):
-        result = db.todos.find_one({'_id': collection.ObjectId(id)})
-        todo = Todo(result.name, result.description)
-        todo.id = result.id
-        return todo
+    def find_one(cls, *args, **kwargs):
+        if kwargs.get('id'):
+            result = db.todos.find_one(
+                {'_id': collection.ObjectId(kwargs.get('id', None))})
+        elif kwargs.get('title'):
+            result = db.todos.find_one({'title': kwargs.get('title')})
+        elif kwargs.get('description'):
+            result = db.todos.find_one(
+                {'description': kwargs.get('description')})
 
+        todo = cls(result.get('title'), result.get('description'))
+        todo.id = str(result.get('_id'))
+        return todo
