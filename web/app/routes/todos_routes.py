@@ -18,4 +18,6 @@ class TodoListView(HTTPMethodView):
 
 class TodoView(HTTPMethodView):
     def get(self, request, id):
-        return text('GET /api/todos/:id')
+        todo = Todo.find_one(id=id)
+
+        return json(todo)
