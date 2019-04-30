@@ -10,7 +10,6 @@ class TodoListView(HTTPMethodView):
         return json({'todos': todos})
 
     def post(self, request):
-        print(request.json)
         todo = Todo(title=request.json.get('title', None),
                     description=request.json.get('description', None))
         todo.save()

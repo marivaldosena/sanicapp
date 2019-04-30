@@ -1,3 +1,4 @@
+import json
 from pymongo import MongoClient, collection
 
 mongo = MongoClient('mongodb://localhost:27017')
@@ -9,9 +10,18 @@ class Todo():
         self.title = title
         self.description = description
 
+    def to_json(self):
+        todo = {
+            'id': str(self.id),
+            'title': self.title,
+            'description': self.description
+        }
+
+        return todo
+
     @classmethod
     def find(cls):
-        result = db.todos.find()
+        result = db.todos.find()  
 
         todos = [Todo.find_one(item.get('_id')) for item in result]
         return todos
@@ -21,7 +31,7 @@ class Todo():
             'title': self.title,
             'description': self.description
         })
-        self.id = result.inserted_id
+        self.id = '{}'.format(result.inserted_id)
 
     @classmethod
     def find_one(cls, *args, **kwargs):
